@@ -37,17 +37,32 @@ with st.sidebar:
 # --- FUNGSI UTAMA SCRAPING ---
 def scrape_youtube(url, scrolls, target, get_replies):
     data_collected = []
-    video_likes = "0" 
-    video_views = "0" # Variabel baru untuk Views
+    video_likes = "0"
+    video_views = "0"
     
-    # 1. Setup Chrome Driver
+    # --- SETUP CHROME UNTUK STREAMLIT CLOUD ---
     options = webdriver.ChromeOptions()
-    options.add_argument("--mute-audio")
-    options.add_argument("--start-maximized")
-    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--headless") # WAJIB: Tidak ada UI di Cloud
+    options.add_argument("--no-sandbox") # WAJIB: Keamanan Linux
+    options.add_argument("--disable-dev-shm-usage") # WAJIB: Mengatasi limit memori
+    options.add_argument("--disable-gpu")
     
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    wait = WebDriverWait(driver, 20)
+    # Paksa ukuran layar virtual agar elemen tidak sembunyi
+    options.add_argument("--window-size=1920,1080") 
+    
+    # Konfigurasi Service agar otomatis mencari Chromium yang diinstall packages.txt
+    try:
+        service = Service(ChromeDriverManager(driver_version="latest").install())
+        driver = webdriver.Chrome(service=service, options=options)
+    except Exception as e:
+        # Fallback jika webdriver manager gagal di cloud
+        # Kadang path chromium di cloud ada di lokasi spesifik
+        options.binary_location = "/usr/bin/chromium"
+        service = Service("/usr/bin/chromedriver")
+        driver = webdriver.Chrome(service=service, options=options)
+        wait = WebDriverWait(driver, 20)
+    
+    # ... (Lanjutkan dengan kode try driver.get(url) dan seterusnya sama seperti sebelumnya)
     
     try:
         driver.get(url)
