@@ -15,8 +15,7 @@ st.set_page_config(page_title="YouTube Scraper Pro", page_icon="🎥", layout="w
 # --- JUDUL & DESKRIPSI ---
 st.title("🎥 YouTube Comment, Like & View Scraper")
 st.markdown("""
-Aplikasi untuk mengambil **Views**, **Likes**, dan **Komentar** YouTube.
-*Catatan: Jumlah Dislike tidak dapat diambil karena kebijakan privasi YouTube (Hidden).*
+Aplikasi untuk mengambil **Komentar** YouTube
 """)
 
 # --- SIDEBAR (INPUT USER) ---
